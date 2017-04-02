@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Argo
+import SwiftyJSON
 
 enum ResultsItemType: String {
     case token = "TOKEN"
@@ -16,7 +16,7 @@ enum ResultsItemType: String {
     func resultItem(json: JSON) -> ResultsItem? {
         switch self {
         case .token:
-            return TokenItem.decode(json).value
+            return TokenItem.decode(json: json)
         case .unknown:
             return nil
         }
@@ -25,4 +25,5 @@ enum ResultsItemType: String {
 
 protocol ResultsItem {
     func itemType() -> ResultsItemType
+    static func decode(json: JSON) -> ResultsItem?
 }

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import Argo
+import SwiftyJSON
 
 enum Result<Value> {
     case success(Value)
@@ -36,10 +36,10 @@ struct APIParser {
     static func parseResults(json: JSON, onStatusErrorHandler:
         (_ status: String) -> Result<[ResultsItem]>) -> Result<[ResultsItem]> {
 
-        let decodedStatus: Decoded<String> = json <| Keys.responseStatus
-        let decodedResults: Decoded<JSON> = json <| Keys.responseResults
+        let decodedStatus = json[Keys.responseStatus].string
+        let decodedResults = json[Keys.responseResults].array
 
-        guard let status = decodedStatus.value else {
+        guard let status = decodedStatus else {
             return Result.failure(APIError.unableToParseStatus)
         }
 
@@ -47,28 +47,22 @@ struct APIParser {
             return onStatusErrorHandler(status)
         }
 
-        guard let results = decodedResults.value else {
+        guard let results = decodedResults else {
             return Result.failure(APIError.unableToParseResults)
         }
 
-        switch results {
-        case .array(let resultsJsons):
-            let resultsItems = resultsJsons.flatMap { resultJson -> ResultsItem? in
-                let decodedType: Decoded<String> = resultJson <| Keys.responseResultsType
-                let decodedData: Decoded<JSON> = resultJson <| Keys.responseResultsData
+        let resultsItems = results.flatMap { resultJson -> ResultsItem? in
+            let decodedType = resultJson[Keys.responseResultsType].string
+            let decodedData = resultJson[Keys.responseResultsData]
 
-                guard let type = decodedType.value,
-                    let data = decodedData.value,
-                    let resultItemType = ResultsItemType(rawValue: type) else {
-                        return nil
-                }
-
-                return resultItemType.resultItem(json: data)
+            guard let type = decodedType,
+                let resultItemType = ResultsItemType(rawValue: type) else {
+                    return nil
             }
 
-            return Result.success(resultsItems)
-        case .object, .string, .number, .bool, .null:
-            return Result.failure(APIError.unableToParse)
+            return resultItemType.resultItem(json: decodedData)
         }
+
+        return Result.success(resultsItems)
     }
 }

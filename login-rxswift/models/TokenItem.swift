@@ -7,25 +7,26 @@
 //
 
 import Foundation
-import Argo
-import Curry
-import Runes
+import SwiftyJSON
 
-struct TokenItem: ResultsItem {
+struct TokenItem {
     let token: String
-
-    func itemType() -> ResultsItemType {
-        return .token
-    }
 }
 
-extension TokenItem: Decodable {
+extension TokenItem: ResultsItem {
     private struct Keys {
         static let token = "token"
     }
 
-    public static func decode(_ json: JSON) -> Decoded<TokenItem> {
-        return curry(self.init)
-            <^> json <| Keys.token
+    func itemType() -> ResultsItemType {
+        return .token
+    }
+
+    static func decode(json: JSON) -> ResultsItem? {
+        guard let token = json[Keys.token].string else {
+            return nil
+        }
+
+        return TokenItem(token: token)
     }
 }

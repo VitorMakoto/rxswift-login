@@ -9,7 +9,7 @@
 import Foundation
 import Moya
 import RxSwift
-import Argo
+import SwiftyJSON
 
 enum LoginError: Swift.Error {
     case loginWithhEmailOrCPFError(LoginWithEmailOrCPFErrorType)
