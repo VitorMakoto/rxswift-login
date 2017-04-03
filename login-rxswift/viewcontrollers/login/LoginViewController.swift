@@ -21,6 +21,9 @@ class LoginViewController: UIViewController {
         static let headerHeight: LoginFloatState = (250, 100)
         static let transitionDuration = 0.8
         static let transtiionDamping = CGFloat(0.7)
+        static let errorTitle = "Erro"
+        static let errorMessage = "Problema ao estabelecer conexao com o servidor"
+        static let errorOkButtonTitle = "OK"
     }
 
     let viewModel = LoginViewModel()
@@ -180,15 +183,20 @@ class LoginViewController: UIViewController {
             .bindTo(viewModel.didTapEnterButton)
             .addDisposableTo(disposeBag)
 
-        viewModel.currenStateObservable
+        viewModel.updateToNextState
             .skip(1)
-            .subscribe(onNext: { [weak self] state in
-                self?.updateTo(state: state)
+            .subscribe(onNext: { [weak self] loginStateUpdate in
+                self?.update(with: loginStateUpdate)
             }).addDisposableTo(disposeBag)
 
         headerContainer.passwordTitle.backButton.rx.tap
             .bindTo(viewModel.didTapBackButton)
             .addDisposableTo(disposeBag)
+
+        viewModel.errorDidOccurObservable
+            .subscribe(onNext: { [weak self] error in
+                self?.presentGenericErrorAlert()
+            }).addDisposableTo(disposeBag)
     }
 
     private func configureFocusObservers() {
@@ -212,6 +220,36 @@ class LoginViewController: UIViewController {
                 self?.headerContainer.showWelcomeTiltle()
                 KeyboardHelper.dismissKeyboard()
             }).addDisposableTo(disposeBag)
+    }
+
+    private func update(with loginStateUpdate: LoginStateUpdate) {
+        switch (loginStateUpdate.fromState, loginStateUpdate.toState) {
+        case (_, .emailState):
+            animateToEmail()
+            headerContainer.showEmailTitle()
+            emailTextfield.textField.becomeFirstResponder()
+        case (.emailState, .passwordState):
+            animateToPassword()
+            headerContainer.showPasswordTitle()
+            passwordTextfield.cleanContent()
+            passwordTextfield.textField.becomeFirstResponder()
+        case (.signingInState, .passwordState):
+            passwordTextfield.hideSpinner()
+            passwordTextfield.isLocked = false
+        case (_, .signingInState):
+            passwordTextfield.showLoadingSpinner()
+            passwordTextfield.isLocked = true
+        case (_, .signedInState):
+            passwordTextfield.showCheckMark()
+        case (_, .welcomeState):
+            pushWelcomeScreen()
+            KeyboardHelper.dismissKeyboard()
+        case (_, _): break
+        }
+    }
+
+    func attemptToDismissKeyBoard() {
+        viewModel.didAttemptToResignKeyboard.onNext()
     }
 
     private func animateToEmail() {
@@ -310,25 +348,15 @@ class LoginViewController: UIViewController {
         }, completion: nil)
     }
 
-    private func updateTo(state: LoginState) {
-        switch state {
-        case .emailState:
-            animateToEmail()
-            headerContainer.showEmailTitle()
-            emailTextfield.textField.becomeFirstResponder()
-        case .passwordState:
-            animateToPassword()
-            headerContainer.showPasswordTitle()
-            passwordTextfield.cleanContent()
-            passwordTextfield.textField.becomeFirstResponder()
-        case .signingInState: break
-        case .welcomeState:
-            pushWelcomeScreen()
-            KeyboardHelper.dismissKeyboard()
-        }
-    }
+    private func presentGenericErrorAlert() {
+        let alertController = UIAlertController(
+            title: Constants.errorTitle,
+            message: Constants.errorMessage, preferredStyle: .alert)
 
-    func attemptToDismissKeyBoard() {
-        viewModel.didAttemptToResignKeyboard.onNext()
+        alertController.addAction(UIAlertAction(
+            title: Constants.errorOkButtonTitle,
+            style: .default, handler: nil))
+
+        present(alertController, animated: true, completion: nil)
     }
 }

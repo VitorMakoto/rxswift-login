@@ -32,7 +32,9 @@ class LoginAPI {
         return LoginAPI.provider
             .request(.loginWithEmail(email: email, password: password))
             .mapJSON()
-            .map { JSON($0) }
+            .map {
+                JSON($0)
+            }
             .map { APIParser.parseResults(json: $0,
                 onStatusErrorHandler: { status in
                     guard let loginErrorType = LoginWithEmailOrCPFErrorType(rawValue: status) else {

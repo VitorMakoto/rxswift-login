@@ -29,6 +29,9 @@
 		528F40731E89078F004EC927 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528F40721E89078F004EC927 /* LoginButton.swift */; };
 		528F40761E891665004EC927 /* StringValidation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528F40751E891665004EC927 /* StringValidation.swift */; };
 		528F40781E8925B8004EC927 /* LoginPasswordTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 528F40771E8925B8004EC927 /* LoginPasswordTitle.swift */; };
+		529DAFCE1E921F86003F68DB /* LoginSpinner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529DAFCD1E921F86003F68DB /* LoginSpinner.swift */; };
+		529DAFD01E92206E003F68DB /* CGGeometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529DAFCF1E92206E003F68DB /* CGGeometry.swift */; };
+		529DAFD21E9221D4003F68DB /* UIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 529DAFD11E9221D4003F68DB /* UIImage.swift */; };
 		52A2B44D1E89BAA600C2922F /* KeyboardHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52A2B44C1E89BAA600C2922F /* KeyboardHelper.swift */; };
 		E63CF127997F2523AB14376F /* Pods_login_rxswift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F031903A2E1AFB0F109ABFCA /* Pods_login_rxswift.framework */; };
 /* End PBXBuildFile section */
@@ -59,6 +62,9 @@
 		528F40721E89078F004EC927 /* LoginButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
 		528F40751E891665004EC927 /* StringValidation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringValidation.swift; sourceTree = "<group>"; };
 		528F40771E8925B8004EC927 /* LoginPasswordTitle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginPasswordTitle.swift; sourceTree = "<group>"; };
+		529DAFCD1E921F86003F68DB /* LoginSpinner.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginSpinner.swift; sourceTree = "<group>"; };
+		529DAFCF1E92206E003F68DB /* CGGeometry.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGGeometry.swift; sourceTree = "<group>"; };
+		529DAFD11E9221D4003F68DB /* UIImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImage.swift; sourceTree = "<group>"; };
 		52A2B44C1E89BAA600C2922F /* KeyboardHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardHelper.swift; sourceTree = "<group>"; };
 		EAE0F6E44A399C4777B18626 /* Pods-login-rxswift.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-login-rxswift.release.xcconfig"; path = "Pods/Target Support Files/Pods-login-rxswift/Pods-login-rxswift.release.xcconfig"; sourceTree = "<group>"; };
 		F031903A2E1AFB0F109ABFCA /* Pods_login_rxswift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_login_rxswift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -163,6 +169,8 @@
 			children = (
 				528F40521E88DD4A004EC927 /* URL.swift */,
 				528F406E1E88FB93004EC927 /* UIColor.swift */,
+				529DAFCF1E92206E003F68DB /* CGGeometry.swift */,
+				529DAFD11E9221D4003F68DB /* UIImage.swift */,
 			);
 			path = extensions;
 			sourceTree = "<group>";
@@ -214,6 +222,7 @@
 				528F40701E8901B7004EC927 /* LoginHeaderContainer.swift */,
 				528F40721E89078F004EC927 /* LoginButton.swift */,
 				528F40771E8925B8004EC927 /* LoginPasswordTitle.swift */,
+				529DAFCD1E921F86003F68DB /* LoginSpinner.swift */,
 			);
 			path = login;
 			sourceTree = "<group>";
@@ -382,8 +391,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				528F40501E88DCC0004EC927 /* APIParser.swift in Sources */,
+				529DAFD21E9221D4003F68DB /* UIImage.swift in Sources */,
 				528F40781E8925B8004EC927 /* LoginPasswordTitle.swift in Sources */,
 				528F406F1E88FB93004EC927 /* UIColor.swift in Sources */,
+				529DAFCE1E921F86003F68DB /* LoginSpinner.swift in Sources */,
 				528F406D1E88E909004EC927 /* LoginTextfield.swift in Sources */,
 				521B30E01E7C0C7100B193FD /* AppDelegate.swift in Sources */,
 				528F40531E88DD4A004EC927 /* URL.swift in Sources */,
@@ -394,6 +405,7 @@
 				528F404A1E88DBBE004EC927 /* TokenItem.swift in Sources */,
 				528F40761E891665004EC927 /* StringValidation.swift in Sources */,
 				528F40731E89078F004EC927 /* LoginButton.swift in Sources */,
+				529DAFD01E92206E003F68DB /* CGGeometry.swift in Sources */,
 				528F40711E8901B7004EC927 /* LoginHeaderContainer.swift in Sources */,
 				528F40481E88DB14004EC927 /* ResultsItem.swift in Sources */,
 				528F40601E88E003004EC927 /* LoginViewController.swift in Sources */,

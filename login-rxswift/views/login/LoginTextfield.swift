@@ -14,11 +14,17 @@ import RxCocoa
 class LoginTextField: UIView {
     private struct Constants {
         static let alphaAnimationDuration = 0.2
+        static let spinnerSize = CGSize(width: 30, height: 30)
     }
+
     let textField = UITextField()
     let placeholderLabel = UILabel()
+    private let spinner = LoginSpinnerView(frame: CGRect(
+        origin: .zero, size: Constants.spinnerSize))
 
     private let disposeBag = DisposeBag()
+
+    var isLocked: Bool = false
 
     init(placeholderText: String) {
         super.init(frame: CGRect.zero)
@@ -38,6 +44,7 @@ class LoginTextField: UIView {
         textField.tintColor = CoreStyle.color.blue
         textField.textColor = CoreStyle.color.blue
         textField.font = CoreStyle.roboto.regular.withSize(16)
+        textField.delegate = self
 
         placeholderLabel.font = CoreStyle.roboto.regular.withSize(16)
         placeholderLabel.textColor = CoreStyle.color.blue
@@ -47,6 +54,7 @@ class LoginTextField: UIView {
         addGestureRecognizer(tapGestureRecognizer)
 
         addSubview(textField)
+        addSubview(spinner)
         addSubview(placeholderLabel)
 
         configureObservers()
@@ -55,12 +63,18 @@ class LoginTextField: UIView {
     private func makeLayout() {
         textField.snp.makeConstraints { make in
             make.left.equalTo(20)
-            make.right.equalTo(-20)
+            make.right.equalTo(spinner.snp.left).offset(-20)
             make.centerY.equalToSuperview()
         }
 
         placeholderLabel.snp.makeConstraints { make in
             make.top.left.right.equalTo(textField)
+        }
+
+        spinner.snp.makeConstraints { make in
+            make.right.equalTo(snp.right).inset(15)
+            make.width.height.equalTo(30)
+            make.centerY.equalTo(snp.centerY)
         }
     }
 
@@ -97,5 +111,30 @@ class LoginTextField: UIView {
 
     func cleanContent() {
         textField.text = ""
+    }
+
+    func showLoadingSpinner() {
+        spinner.reset()
+        spinner.startLoading()
+    }
+
+    func showCheckMark() {
+        spinner.done()
+    }
+
+    func hideSpinner() {
+        spinner.fadeOut()
+    }
+
+}
+
+extension LoginTextField: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange,
+        replacementString string: String) -> Bool {
+            return !isLocked
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        return false
     }
 }

@@ -13,6 +13,7 @@ enum LoginState {
     case emailState
     case passwordState
     case signingInState
+    case signedInState
     case welcomeState
 }
 
@@ -20,14 +21,19 @@ extension LoginState {
     var enterButtonText: String {
         switch self {
         case .emailState: return "Próximo"
-        case .passwordState, .signingInState, .welcomeState: return "Entrar"
+        case .passwordState, .signingInState, .signedInState, .welcomeState: return "Entrar"
         }
     }
 }
 
+struct LoginStateUpdate {
+    let fromState: LoginState
+    let toState: LoginState
+}
+
 class LoginViewModel {
     private let currentState = BehaviorSubject<LoginState>(value: .emailState)
-    private let errorDidOccur = PublishSubject<Void>()
+    private let errorDidOccur = PublishSubject<Error>()
 
     let emailText = BehaviorSubject<String>(value: "")
     let passwordText = BehaviorSubject<String>(value: "")
@@ -37,12 +43,9 @@ class LoginViewModel {
 
     let isEnterButtonValid: Observable<Bool>
     let enterButtonTextObservable: Observable<String>
+    let updateToNextState: Observable<LoginStateUpdate>
 
-    var currenStateObservable: Observable<LoginState> {
-        return currentState.asObservable()
-    }
-
-    var errorDidOccurObservable: Observable<Void> {
+    var errorDidOccurObservable: Observable<Error> {
         return errorDidOccur.asObservable()
     }
 
@@ -64,10 +67,15 @@ class LoginViewModel {
                     return StringValidationHelper.isValidEmail(emailText)
                 case .passwordState:
                     return passwordText.characters.count >= 6
-                case .signingInState, .welcomeState:
+                case .signingInState, .signedInState, .welcomeState:
                     return false
                 }
             }
+
+        updateToNextState = currentState.scan(LoginStateUpdate(
+            fromState: .emailState, toState: .emailState)) { (lastUpdate, currentState) in
+                return LoginStateUpdate(fromState: lastUpdate.toState, toState: currentState)
+        }
 
         enterButtonTextObservable = currentState.map { $0.enterButtonText }
 
@@ -78,11 +86,21 @@ class LoginViewModel {
                     self?.currentState.onNext(.passwordState)
                 case .passwordState:
                     self?.currentState.onNext(.signingInState)
-                case .signingInState, .welcomeState: break
+                case .signingInState, .signedInState, .welcomeState: break
                 }
             }).addDisposableTo(disposeBag)
 
+        configureBackButtonObserver()
         configureSigningInObserver()
+        configureSignedInObserver()
+    }
+
+    private func configureBackButtonObserver() {
+        didTapBackButton.withLatestFrom(currentState) { $1 }
+            .filter { $0 == .passwordState }
+            .map { _ in return .emailState}
+            .bindTo(currentState)
+            .addDisposableTo(disposeBag)
     }
 
     private func configureSigningInObserver() {
@@ -92,7 +110,7 @@ class LoginViewModel {
             emailText.asObservable(),
             passwordText.asObservable()) { $0 }
 
-        currenStateObservable
+        currentState.asObservable()
             .filter { $0 == .signingInState }
             .withLatestFrom(requestParameters)
             .flatMap { email, password in
@@ -103,12 +121,21 @@ class LoginViewModel {
             .subscribe(onNext: { [weak self] result in
                 switch result {
                 case .success:
-                    self?.currentState.onNext(.welcomeState)
-                case .failure:
+                    self?.currentState.onNext(.signedInState)
+                case .failure(let error):
                     self?.currentState.onNext(.passwordState)
-                    self?.errorDidOccur.onNext()
+                    self?.errorDidOccur.onNext(error)
                 }
             }).addDisposableTo(disposeBag)
+    }
+
+    private func configureSignedInObserver() {
+        currentState.asObservable()
+            .filter { $0 == .signedInState }
+            .delay(1.5, scheduler: MainScheduler.instance)
+            .map { _ in return .welcomeState}
+            .bindTo(currentState)
+            .addDisposableTo(disposeBag)
     }
 }
 

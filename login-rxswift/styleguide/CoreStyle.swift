@@ -22,7 +22,8 @@ class CoreStyle {
 
     static let image = (
         loginBackImage: UIImage(named: "ui_login_back")?.withRenderingMode(.alwaysTemplate),
-        loginSpinner: UIImage(named: "ui-login-spinner")
+        loginSpinner: UIImage(named: "ui-login-spinner"),
+        loginCheckMark: UIImage(named: "ui_checkmark")
     )
 
     static let roboto = Roboto()
