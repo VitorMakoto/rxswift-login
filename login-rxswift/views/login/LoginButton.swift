@@ -1,11 +1,3 @@
-//
-//  LoginButton.swift
-//  login-rxswift
-//
-//  Created by Vitor Makoto on 3/27/17.
-//  Copyright © 2017 Work&Co. All rights reserved.
-//
-
 import UIKit
 import SnapKit
 import RxSwift

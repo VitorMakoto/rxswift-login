@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  login-rxswift
-//
-//  Created by Vitor Makoto on 3/17/17.
-//  Copyright © 2017 Work&Co. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain

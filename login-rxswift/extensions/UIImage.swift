@@ -1,11 +1,3 @@
-//
-//  UIImage.swift
-//  login-rxswift
-//
-//  Created by Vitor Makoto on 4/3/17.
-//  Copyright © 2017 Work&Co. All rights reserved.
-//
-
 import UIKit
 import CoreGraphics
 

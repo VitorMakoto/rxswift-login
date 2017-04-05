@@ -1,11 +1,3 @@
-//
-//  CGGeometry.swift
-//  login-rxswift
-//
-//  Created by Vitor Makoto on 4/3/17.
-//  Copyright © 2017 Work&Co. All rights reserved.
-//
-
 import CoreGraphics
 
 extension CGRect {

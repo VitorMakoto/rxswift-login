@@ -1,11 +1,3 @@
-//
-//  UIColor.swift
-//  login-rxswift
-//
-//  Created by Vitor Makoto on 3/27/17.
-//  Copyright © 2017 Work&Co. All rights reserved.
-//
-
 import UIKit
 import SnapKit
 
@@ -14,7 +6,6 @@ class LoginHeaderContainer: UIView {
         static let alphaAnimationDuration = 0.2
         static let welcomeText = "Olá"
         static let emailText = "Digite o e-mail:"
-//        static let passwordText = "Agora digite a senha:"
     }
     private let welcomeTitle = UILabel()
     private let emailTitle = UILabel()
