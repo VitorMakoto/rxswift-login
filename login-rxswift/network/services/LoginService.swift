@@ -8,7 +8,7 @@ enum LoginService {
 extension LoginService: TargetType {
     var baseURL: URL {
         guard let url = URL(string:
-            "http://ec2-54-94-187-107.sa-east-1.compute.amazonaws.com") else {
+            "http://loginapp.ddns.net") else {
                 assertionFailure("Unable to initialize login service URL")
                 return URL.emptyURL()
         }
